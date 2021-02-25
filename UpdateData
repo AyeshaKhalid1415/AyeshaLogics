@@ -1,0 +1,40 @@
+public ActionResult updateCust(int id)
+        {
+            ComplaintManagementSystemEntities cm = new ComplaintManagementSystemEntities();
+            C_User_ u_c = cm.C_User_.Where(x=>x.user_id == id).FirstOrDefault();
+            UserVM u_vm = new UserVM();
+            u_vm.user_id = u_c.user_id;
+            u_vm.user_name = u_c.user_name;
+            u_vm.user_email = u_c.user_email;
+            u_vm.user_password = u_c.user_password;
+
+            var P_list = (new List<SelectListItem>
+              {
+                  new SelectListItem{ Text=u_c.province,Selected= true },
+                  new SelectListItem{ Text="Balochistan", Value = "Balochistan"},
+                  new SelectListItem{ Text="Khyber Pakhtunkhwa", Value = "Khyber Pakhtunkhwa" },
+                  new SelectListItem{ Text="Punjab", Value = "Punjab"  },
+                  new SelectListItem{ Text="Sindh", Value = "Sindh"  },
+               });
+
+            ViewData["province"] = P_list;
+            u_vm.Address = u_c.Address;
+            ViewBag.city = Getcity((int)u_c.city_id);
+            ViewBag.role = Getrole((int)u_c.role_id);
+            return View(u_vm);
+        }
+        [HttpPost]
+        public ActionResult updateCust(UserVM u)
+        {
+            ComplaintManagementSystemEntities cm = new ComplaintManagementSystemEntities();
+            C_User_ u_db = cm.C_User_.Where(x=>x.user_id==u.user_id).FirstOrDefault();
+            u_db.user_name = u.user_name;
+            u_db.user_email = u.user_email;
+            u_db.user_password = u.user_password;
+            u_db.role_id = u.role_id;
+            u_db.province = u.province;
+            u_db.city_id = u.city_id;
+            u_db.Address = u.Address;
+            cm.SaveChanges();
+            return RedirectToAction("ViewCust_Details");
+        }
