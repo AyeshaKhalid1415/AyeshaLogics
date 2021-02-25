@@ -1,0 +1,19 @@
+        public ActionResult AddComplaint()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult AddComplaint(Complaint_VM comp_vm)
+        {
+            ComplaintManagementSystemEntities cm = new ComplaintManagementSystemEntities();
+            Complaint c = new Complaint();
+            c.comp_description = comp_vm.comp_description;
+            c.comp_status = comp_vm.comp_status;
+            DateTime now = DateTime.Now;
+            c.comp_date =Convert.ToString(now);
+            c.user_id = comp_vm.user_id;
+            c.comp_nature = comp_vm.comp_nature;
+            cm.Complaints.Add(c);
+            cm.SaveChanges();
+            return RedirectToAction("HomePage");
+        }
