@@ -1,0 +1,23 @@
+public ActionResult DeleteEMP(int id)
+        {
+            ComplaintManagementSystemEntities cm = new ComplaintManagementSystemEntities();
+            List<Rating> p = cm.Ratings.Where(x => x.User_Rating_id == id).ToList();
+            List<Complaint> cl = cm.Complaints.Where(x => x.user_id == id).ToList();
+            List<C_User_> em = cm.C_User_.Where(x => x.user_id == id).ToList();
+
+            foreach (var item in p)
+            {
+                cm.Ratings.Remove(item);
+            }
+
+            foreach (var item in cl)
+            {
+                cm.Complaints.Remove(item);
+            }
+            foreach (var item in em)
+            {
+                cm.C_User_.Remove(item);
+            }
+            cm.SaveChanges();
+            return RedirectToAction("ViewEmp_Details");
+        }
